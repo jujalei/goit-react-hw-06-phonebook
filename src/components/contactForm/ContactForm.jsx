@@ -1,12 +1,19 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
 
 import { FormWrap, FormInput, FormBtn } from './ContactForm.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/contactSlice';
+import { getContact } from 'redux/selectors';
 
-export function ContactForm({ onForm }) {
+export function ContactForm() {
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
+
+  const contacts = useSelector(getContact);
+  console.log('contacts :>> ', contacts);
+
+  const dispatch = useDispatch();
 
   const handlePhoneChange = e => {
     setPhone(e.target.value);
@@ -24,7 +31,17 @@ export function ContactForm({ onForm }) {
       name: name,
       number: phone,
     };
-    onForm(contact);
+
+    const contactCopy = [...contacts];
+
+    if (
+      contactCopy.some(existingContact => existingContact.name === contact.name)
+    ) {
+      alert(`${contact.name} вже є в контактах`);
+      return;
+    }
+
+    dispatch(addContact(contact));
 
     setPhone('');
     setName('');
@@ -64,7 +81,3 @@ export function ContactForm({ onForm }) {
     </FormWrap>
   );
 }
-
-ContactForm.propTypes = {
-  onForm: PropTypes.func.isRequired,
-};

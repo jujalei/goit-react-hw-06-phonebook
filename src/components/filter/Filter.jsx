@@ -1,3 +1,5 @@
+import { useDispatch } from 'react-redux';
+
 import {
   FilterWrap,
   FilterInput,
@@ -5,7 +7,20 @@ import {
   FilterClearBtn,
 } from './Filter.styled';
 
-export function Filter({ searchName, onSearch, clearFilter }) {
+import { searchContact } from 'redux/filterSlice';
+import { useEffect, useState } from 'react';
+
+export function Filter() {
+  const [filter, setFilter] = useState('');
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(searchContact(filter.toString()));
+  }, [filter, dispatch]);
+
+  const handleFilterClear = () => setFilter('');
+
   return (
     <FilterWrap>
       <InputWrapper>
@@ -14,11 +29,11 @@ export function Filter({ searchName, onSearch, clearFilter }) {
           <FilterInput
             name="text"
             type="text"
-            value={searchName}
-            onChange={onSearch}
+            value={filter}
+            onChange={e => setFilter(e.target.value)}
           />
         </label>
-        <FilterClearBtn type="button" onClick={clearFilter}>
+        <FilterClearBtn type="button" onClick={handleFilterClear}>
           &times;
         </FilterClearBtn>
       </InputWrapper>
