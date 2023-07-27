@@ -18,39 +18,37 @@ export function ContactList() {
 
   const dispatch = useDispatch();
 
-  const filteredContacts = contacts.filter(contact => {
-    if (typeof filter === 'string') {
-      return contact.name.toLowerCase().includes(filter.toLowerCase());
-    }
-    return true;
-  });
+  const filteredContacts =
+    Array.isArray(contacts) && typeof filter === 'string'
+      ? contacts.filter(contact =>
+          contact.name.toLowerCase().includes(filter.toLowerCase())
+        )
+      : [];
 
   return (
     <div>
       <div>
         <SubTitle>Contacts</SubTitle>
         <Filter />
-        {filteredContacts.length > 0 ? (
-          <ContactsList>
-            {filteredContacts.map(contact => {
-              return (
-                <ListItem key={contact.id}>
-                  <span>
-                    {contact.name}: {contact.number}
-                  </span>
-                  <DeleteBtn
-                    type="button"
-                    onClick={() => {
-                      dispatch(deleteContact(contact.id));
-                    }}
-                  ></DeleteBtn>
-                </ListItem>
-              );
-            })}
-          </ContactsList>
-        ) : (
-          <p>No contacts found.</p>
-        )}
+        <ContactsList>
+          {filteredContacts.length > 0 ? (
+            filteredContacts.map(contact => (
+              <ListItem key={contact.id}>
+                <span>
+                  {contact.name}: {contact.number}
+                </span>
+                <DeleteBtn
+                  type="button"
+                  onClick={() => {
+                    dispatch(deleteContact(contact.id));
+                  }}
+                ></DeleteBtn>
+              </ListItem>
+            ))
+          ) : (
+            <ListItem>No contacts found</ListItem>
+          )}
+        </ContactsList>
       </div>
     </div>
   );
