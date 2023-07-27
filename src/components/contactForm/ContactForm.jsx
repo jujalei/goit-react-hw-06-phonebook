@@ -36,11 +36,13 @@ export function ContactForm() {
       number: phone,
     };
 
-    for (const existingContact of contacts) {
-      if (existingContact.name.toLowerCase() === contact.name.toLowerCase()) {
-        alert(`${contact.name} is already in contacts`);
-        return;
-      }
+    const isInContacts = contacts.some(contact => {
+      return contact.name.toLowerCase() === name.toLowerCase();
+    });
+
+    if (isInContacts) {
+      alert(`${name} is already in contacts.`);
+      return;
     }
 
     dispatch(addContact(contact));
