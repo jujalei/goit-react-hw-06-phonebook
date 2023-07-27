@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Filter } from '../filter/Filter';
 
-import { getContact } from 'redux/selectors';
+import { getContact, getFilter } from 'redux/selectors';
 
 import { deleteContact } from 'redux/contactSlice';
 
@@ -14,17 +14,25 @@ import {
 
 export function ContactList() {
   const contacts = useSelector(getContact);
-  console.log('conTActs :>> ', contacts);
+  const filter = useSelector(getFilter);
+
   const dispatch = useDispatch();
+
+  const filteredContacts = contacts.filter(contact => {
+    if (typeof filter === 'string') {
+      return contact.name.toLowerCase().includes(filter.toLowerCase());
+    }
+    return true;
+  });
 
   return (
     <div>
-      {contacts?.length > 0 && (
-        <div>
-          <SubTitle>Contacts</SubTitle>
-          <Filter />
+      <div>
+        <SubTitle>Contacts</SubTitle>
+        <Filter />
+        {filteredContacts.length > 0 ? (
           <ContactsList>
-            {contacts.map(contact => {
+            {filteredContacts.map(contact => {
               return (
                 <ListItem key={contact.id}>
                   <span>
@@ -40,8 +48,10 @@ export function ContactList() {
               );
             })}
           </ContactsList>
-        </div>
-      )}
+        ) : (
+          <p>No contacts found.</p>
+        )}
+      </div>
     </div>
   );
 }

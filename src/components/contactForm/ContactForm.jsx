@@ -11,7 +11,6 @@ export function ContactForm() {
   const [name, setName] = useState('');
 
   const contacts = useSelector(getContact);
-  console.log('contacts :>> ', contacts);
 
   const dispatch = useDispatch();
 
@@ -35,9 +34,12 @@ export function ContactForm() {
     const contactCopy = [...contacts];
 
     if (
-      contactCopy.some(existingContact => existingContact.name === contact.name)
+      contactCopy.some(
+        existingContact =>
+          existingContact.name.toLowerCase() === contact.name.toLowerCase()
+      )
     ) {
-      alert(`${contact.name} вже є в контактах`);
+      alert(`${contact.name} is already in contacts`);
       return;
     }
 
@@ -56,7 +58,7 @@ export function ContactForm() {
           type="text"
           name="name"
           value={name}
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          pattern="^[a-zA-Zа-яА-ЯіІїЇ]+(([' -][a-zA-Zа-яА-ЯіІїЇ ])?[a-zA-Zа-яА-ЯіІїЇ]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
         />
