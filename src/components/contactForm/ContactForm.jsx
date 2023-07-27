@@ -31,10 +31,8 @@ export function ContactForm() {
       number: phone,
     };
 
-    const contactCopy = [...contacts];
-
     if (
-      contactCopy.some(
+      contacts.some(
         existingContact =>
           existingContact.name.toLowerCase() === contact.name.toLowerCase()
       )
