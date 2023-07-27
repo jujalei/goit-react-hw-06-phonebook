@@ -25,20 +25,22 @@ export function ContactForm() {
   const handleSubmitForm = e => {
     e.preventDefault();
 
+    if (!name || !phone) {
+      alert('Please enter name and phone number.');
+      return;
+    }
+
     const contact = {
       id: nanoid(),
       name: name,
       number: phone,
     };
 
-    if (
-      contacts.some(
-        existingContact =>
-          existingContact.name.toLowerCase() === contact.name.toLowerCase()
-      )
-    ) {
-      alert(`${contact.name} is already in contacts`);
-      return;
+    for (const existingContact of contacts) {
+      if (existingContact.name.toLowerCase() === contact.name.toLowerCase()) {
+        alert(`${contact.name} is already in contacts`);
+        return;
+      }
     }
 
     dispatch(addContact(contact));
