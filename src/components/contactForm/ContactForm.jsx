@@ -36,8 +36,8 @@ export function ContactForm() {
       number: phone,
     };
 
-    const isInContacts = contacts.some(contact => {
-      return contact.name.toLowerCase() === name.toLowerCase();
+    const isInContacts = contacts.some(existingContact => {
+      return existingContact.name.toLowerCase() === name.toLowerCase();
     });
 
     if (isInContacts) {
